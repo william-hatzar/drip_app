@@ -1,10 +1,12 @@
+import 'package:drip_app/ProductView.dart';
 import 'package:drip_app/models/ProductModel.dart';
 import 'package:flutter/material.dart';
 
 class ProductGridView extends StatelessWidget {
   final List<ProductsModel> filteredProducts;
 
-  const ProductGridView({Key? key, required this.filteredProducts}) : super(key: key);
+  const ProductGridView({Key? key, required this.filteredProducts})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,54 +22,69 @@ class ProductGridView extends StatelessWidget {
       ),
       itemCount: filteredProducts.length,
       itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.transparent,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.network(
-                    filteredProducts[index].imageUrl,
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.cover,
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => ProductView(
+                        productName: filteredProducts[index].productName,
+                        imageUrl: filteredProducts[index].imageUrl,
+                        price: filteredProducts[index].price,
+                        category: filteredProducts[index].category,
+                        rating: filteredProducts[index].rating,
+                        reviews: filteredProducts[index].reviews,
+                        description: filteredProducts[index].description)));
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.transparent,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      filteredProducts[index].imageUrl,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                filteredProducts[index].productName,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: "Poppins",
+                const SizedBox(height: 8),
+                Text(
+                  filteredProducts[index].productName,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: "Poppins",
+                  ),
                 ),
-              ),
-              Text(
-                filteredProducts[index].category,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w200,
-                  fontFamily: "Poppins",
+                Text(
+                  filteredProducts[index].category,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w200,
+                    fontFamily: "Poppins",
+                  ),
                 ),
-              ),
-              Text(
-                filteredProducts[index].price,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: "Poppins",
+                Text(
+                  filteredProducts[index].price,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: "Poppins",
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
