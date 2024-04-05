@@ -1,13 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:drip_app/constants.dart';
+import 'package:drip_app/models/ProductModel.dart';
+import 'package:drip_app/models/ProductModelSInk.dart';
 import 'package:drip_app/widgets/BottomNavBar.dart';
 import 'package:drip_app/widgets/FliterButtonsListView.dart';
 import 'package:drip_app/widgets/ProductsGridView.dart';
 import 'package:drip_app/widgets/SearchWidget.dart';
 import 'package:drip_app/widgets/TextWidget.dart';
 import 'package:drip_app/widgets/TopRow.dart';
-import 'package:flutter/material.dart';
-import 'package:drip_app/models/ProductModel.dart';
-import 'package:drip_app/models/ProductModelSInk.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController text1 = TextEditingController();
   Set<String> distinctCategories = Set();
   List<ProductsModel> filteredProducts = [];
+  bool isGridView = true; // To track the current view mode
 
   @override
   void initState() {
@@ -40,6 +41,20 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         // Filter products by selected category
         filteredProducts = products.where((product) => product.category == category).toList();
+      }
+    });
+  }
+
+  void searchProducts(String searchText) {
+    setState(() {
+      if (searchText.isEmpty) {
+        // If search text is empty, reset to display all products
+        filteredProducts = List.from(products);
+      } else {
+        // Filter products based on search text
+        filteredProducts = products
+            .where((product) => product.productName.toLowerCase().contains(searchText.toLowerCase()))
+            .toList();
       }
     });
   }
@@ -76,7 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               SizedBox(height: 20),
-              SearchWidget(textController: text1),
+              SearchWidget(
+                textController: text1,
+                onChanged: searchProducts, // Call searchProducts when text changes
+              ),
               SizedBox(height: 20),
               FilterButtonsListView(
                 distinctCategories: distinctCategories,
@@ -85,12 +103,33 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 20),
               TopRow(leftText: topProducts, rightText: showAll),
               const SizedBox(height: 10),
-              ProductGridView(filteredProducts: filteredProducts)
+              isGridView
+                  ? ProductGridView(filteredProducts: filteredProducts) // Display GridView
+                  : ListView.builder(
+                // Display ListView
+                itemCount: filteredProducts.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(filteredProducts[index].productName),
+                    subtitle: Text(filteredProducts[index].description),
+                    // You can customize ListTile according to your product model
+                  );
+                },
+              ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: bottomNavBar()
+      bottomNavigationBar: bottomNavBar(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            // Toggle between grid and list view
+            isGridView = !isGridView;
+          });
+        },
+        child: Icon(isGridView ? Icons.list : Icons.grid_view),
+      ),
     );
   }
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class SearchWidget extends StatefulWidget {
   final TextEditingController textController;
-  const SearchWidget({Key? key, required this.textController}) : super(key: key);
+  final Function(String)? onChanged;
+
+  const SearchWidget({Key? key, required this.textController, this.onChanged}) : super(key: key);
 
   @override
   State<SearchWidget> createState() => _SearchWidgetState();
@@ -11,8 +13,9 @@ class SearchWidget extends StatefulWidget {
 class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
-    return  TextFormField(
+    return TextFormField(
       controller: widget.textController,
+      onChanged: widget.onChanged,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.only(left: 20),
         fillColor: const Color(0xffF4F1F9),
@@ -29,4 +32,3 @@ class _SearchWidgetState extends State<SearchWidget> {
     );
   }
 }
-
