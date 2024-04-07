@@ -85,23 +85,27 @@ class ProductProvider extends ChangeNotifier {
   ];
 
   // Method to toggle favorite status for a product
-  List<FavoritesModel> favoriteProducts = []; // New list to store favorite products
+  List<FavoritesModel> favoriteProducts = []; // List to store favorite products
 
   void toggleFavorite(int index) {
+    // Toggle the isFavourite property of the product at the specified index
     products[index] = products[index].toggleFavorite();
+
+    // Check if the product is now a favorite and update favoriteProducts accordingly
     if (products[index].isFavourite) {
       favoriteProducts.add(FavoritesModel(
         productName: products[index].productName,
         category: products[index].category,
         price: products[index].price,
         description: products[index].description,
-        isFavourite: products[index].isFavourite
+        isFavourite: true,
       ));
     } else {
       favoriteProducts.removeWhere((favProduct) =>
       favProduct.productName == products[index].productName);
     }
-    notifyListeners();
+
+    notifyListeners(); // Notify listeners of the change
   }
 
 }

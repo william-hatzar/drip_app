@@ -1,5 +1,5 @@
 import 'package:drip_app/models/FavoritesModel.dart';
-import 'package:drip_app/widgets/Favorites.dart';
+import 'package:drip_app/Favorites.dart';
 import 'package:flutter/material.dart';
 import 'package:drip_app/constants.dart';
 import 'package:drip_app/models/ProductModel.dart';

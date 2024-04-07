@@ -46,14 +46,13 @@ class ProductView extends StatefulWidget {
 }
 
 class _ProductViewState extends State<ProductView> {
-  bool favorite = false;
-  int totalStars = 5;
-  int _quantity = 1;
-
+  bool favorite = false; // Local state variable for favorite status
+  var _quantity = 1;
+  var totalStars = 5;
   @override
   void initState() {
     super.initState();
-    favorite = widget.favourite;
+    favorite = widget.favourite; // Initialize favorite status from the passed value
   }
 
   @override
@@ -133,23 +132,23 @@ class _ProductViewState extends State<ProductView> {
             child: IconButton(
               onPressed: () {
                 setState(() {
-                  favorite = !favorite;
-                  widget.products.isFavourite = favorite; // Update isFavourite in the ProductModel
-                  FavoritesModel favModel = FavoritesModel(
+                  favorite = !favorite; // Toggle favorite status locally
+                  // Update isFavourite status in the products list
+                  widget.products.isFavourite = favorite;
+                  // Pass updated favorite status to the addToFavorites function
+                  widget.addToFavorites(FavoritesModel(
                     productName: widget.productName,
                     category: widget.category,
                     price: widget.price,
                     description: widget.description,
                     isFavourite: favorite,
-                  );
-                  widget.addToFavorites(favModel); // Pass the updated FavoritesModel object
-                  Provider.of<ProductProvider>(context, listen: false)
-                      .toggleFavorite(widget.productIndex);
+                  ));
+                  // No need to call toggleFavorite here, as it's already called in the Favorites page
                 });
               },
               icon: Icon(
                 Icons.favorite,
-                color: favorite ? Colors.red : Colors.grey,
+                color: favorite ? Colors.red : Colors.grey, // Use local favorite status
               ),
             ),
           ),
