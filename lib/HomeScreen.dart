@@ -1,16 +1,19 @@
+import 'package:drip_app/models/FavoritesModel.dart';
+import 'package:drip_app/widgets/Favorites.dart';
 import 'package:flutter/material.dart';
 import 'package:drip_app/constants.dart';
 import 'package:drip_app/models/ProductModel.dart';
 import 'package:drip_app/models/ProductModelSInk.dart';
-import 'package:drip_app/widgets/BottomNavBar.dart';
 import 'package:drip_app/widgets/FliterButtonsListView.dart';
 import 'package:drip_app/widgets/ProductsGridView.dart';
 import 'package:drip_app/widgets/SearchWidget.dart';
 import 'package:drip_app/widgets/TextWidget.dart';
 import 'package:drip_app/widgets/TopRow.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final List<ProductsModel> products; // Add this line
+  const HomeScreen({Key? key, required this.products}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -21,26 +24,47 @@ class _HomeScreenState extends State<HomeScreen> {
   Set<String> distinctCategories = Set();
   List<ProductsModel> filteredProducts = [];
   bool isGridView = true; // To track the current view mode
+  List<FavoritesModel> favProducts = [];
+
+
+  // Function to add or remove a product from favorites
+  void addToFavorites(FavoritesModel favProduct) {
+    setState(() {
+      final existingProductIndex = favProducts.indexWhere((product) =>
+      product.productName == favProduct.productName &&
+          product.category == favProduct.category &&
+          product.price == favProduct.price &&
+          product.description == favProduct.description);
+
+      if (existingProductIndex != -1) {
+        favProducts.removeAt(existingProductIndex);
+      } else {
+        favProducts.add(favProduct);
+      }
+    });
+  }
+
+
 
   @override
   void initState() {
     super.initState();
-    // Extract distinct categories from the list of products
-    for (var product in products) {
+    // Use Provider to get access to ProductProvider and its products
+    final productProvider = Provider.of<ProductProvider>(context, listen: false);
+    filteredProducts = List.from(productProvider.products);
+    for (var product in productProvider.products) {
       distinctCategories.add(product.category);
     }
-    // Initially display all products
-    filteredProducts = List.from(products);
   }
 
   void filterProductsByCategory(String category) {
     setState(() {
       if (category == "All") {
         // Show all products
-        filteredProducts = List.from(products);
+        filteredProducts = List.from(widget.products);
       } else {
         // Filter products by selected category
-        filteredProducts = products.where((product) => product.category == category).toList();
+        filteredProducts = widget.products.where((product) => product.category == category).toList();
       }
     });
   }
@@ -49,10 +73,10 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       if (searchText.isEmpty) {
         // If search text is empty, reset to display all products
-        filteredProducts = List.from(products);
+        filteredProducts = List.from(widget.products);
       } else {
         // Filter products based on search text
-        filteredProducts = products
+        filteredProducts = widget.products
             .where((product) => product.productName.toLowerCase().contains(searchText.toLowerCase()))
             .toList();
       }
@@ -104,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
               TopRow(leftText: topProducts, rightText: showAll),
               const SizedBox(height: 10),
               isGridView
-                  ? ProductGridView(filteredProducts: filteredProducts) // Display GridView
+                  ? ProductGridView(filteredProducts: filteredProducts, addToFavorites: addToFavorites) // Display GridView
                   : ListView.builder(
                 // Display ListView
                 itemCount: filteredProducts.length,
@@ -120,16 +144,41 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: bottomNavBar(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            // Toggle between grid and list view
-            isGridView = !isGridView;
-          });
-        },
-        child: Icon(isGridView ? Icons.list : Icons.grid_view),
-      ),
+      bottomNavigationBar: bottomNavBar(context, favProducts, Provider.of<ProductProvider>(context)), // Pass context to bottomNavBar function
     );
   }
+}
+
+Widget bottomNavBar(BuildContext context, List<FavoritesModel> favProducts, ProductProvider productProvider) {
+  return BottomNavigationBar(
+    type: BottomNavigationBarType.fixed,
+    items: const <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Icon(Icons.search),
+        label: 'Search',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.favorite_border),
+        label: 'Favourites',
+      ),
+      BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings')
+    ],
+    onTap: (int index) {
+      // Navigate to the corresponding page when a bottom navigation bar item is tapped
+      switch (index) {
+        case 0:
+          Navigator.pushNamed(context, '/home');
+          break;
+        case 1:
+          Navigator.push(context, MaterialPageRoute(builder: (_) => Favorites(favProducts: favProducts, productProvider: productProvider)));
+          break;
+        case 2:
+          Navigator.pushNamed(context, '/settings');
+          break;
+        default:
+          Navigator.pushNamed(context, '/home');
+          break;
+      }
+    },
+  );
 }

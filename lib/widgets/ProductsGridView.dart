@@ -1,12 +1,17 @@
 import 'package:drip_app/ProductView.dart';
+import 'package:drip_app/models/FavoritesModel.dart';
 import 'package:drip_app/models/ProductModel.dart';
 import 'package:flutter/material.dart';
 
 class ProductGridView extends StatelessWidget {
   final List<ProductsModel> filteredProducts;
+  final Function(FavoritesModel) addToFavorites;
 
-  const ProductGridView({Key? key, required this.filteredProducts})
-      : super(key: key);
+  const ProductGridView({
+    Key? key,
+    required this.filteredProducts,
+    required this.addToFavorites,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +30,23 @@ class ProductGridView extends StatelessWidget {
         return GestureDetector(
           onTap: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => ProductView(
-                        productName: filteredProducts[index].productName,
-                        imageUrl: filteredProducts[index].imageUrl,
-                        price: filteredProducts[index].price,
-                        category: filteredProducts[index].category,
-                        rating: filteredProducts[index].rating,
-                        reviews: filteredProducts[index].reviews,
-                        description: filteredProducts[index].description)));
+              context,
+              MaterialPageRoute(
+                builder: (_) => ProductView(
+                  products: filteredProducts[index],
+                  productIndex: index,
+                  productName: filteredProducts[index].productName,
+                  imageUrl: filteredProducts[index].imageUrl,
+                  price: filteredProducts[index].price,
+                  category: filteredProducts[index].category,
+                  rating: filteredProducts[index].rating,
+                  reviews: filteredProducts[index].reviews,
+                  description: filteredProducts[index].description,
+                  favourite: filteredProducts[index].isFavourite,
+                  addToFavorites: addToFavorites,
+                ),
+              ),
+            );
           },
           child: Container(
             decoration: BoxDecoration(

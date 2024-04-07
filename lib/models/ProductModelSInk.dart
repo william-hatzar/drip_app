@@ -1,77 +1,111 @@
 import 'package:drip_app/models/ProductModel.dart';
+import 'package:flutter/cupertino.dart';
 
-List<ProductsModel> products = [
-  ProductsModel(
-      productName: "Air Jordan 1",
-      colour: "Black/White/Metallic Gold",
-      category: "Shoes",
-      price: "£175",
-      rating: "3",
-      imageUrl:
-          "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/aewirmmftxbipywxwdkj/air-jordan-1-mid-se-shoes-gg517N.png",
-      description: jordan1Description,
-      reviews: 140),
-  ProductsModel(
-      productName: "Air Jordan 5 Retro",
-      colour: "Black/White/Metallic Gold",
-      category: "Shoes",
-      price: "£250",
-      rating: "5",
-      imageUrl:
-          "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d79c4c47-f347-4050-89c5-788eebc0fc97/air-jordan-5-retro-shoes-T78RMv.png",
-      description: jordan5Description,
-      reviews: 80),
-  ProductsModel(
-      productName: "Air Jordan 1 Zoom",
-      colour: "Black/White/Metallic Gold",
-      category: "Shoes",
-      price: "£115",
-      rating: "5",
-      imageUrl:
-          "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/cd5b4bbf-263d-4f4c-8713-c94593137966/air-jordan-1-zoom-cmft-2-shoes-0Vxszn.png",
-      description: jordan1CmftDescription,
-      reviews: 90),
-  ProductsModel(
-      productName: "KAWS x UNIQLO UT",
-      colour: "Black",
-      category: "Sweatshirts",
-      price: "£175",
-      rating: "2",
-      imageUrl:
-          "https://www.kickgame.co.uk/cdn/shop/products/crewn-neck-kaws-black_grande.png?v=1694206687",
-      description: kawsBlackJumper,
-      reviews: 300),
-  ProductsModel(
-      productName: "Broken Planet",
-      colour: "Black",
-      category: "Sweatshirts",
-      price: "£179",
-      rating: "5",
-      imageUrl:
-          "https://www.kickgame.co.uk/cdn/shop/files/BPM-ITA-HOOD-NVY_grande.png?v=1707924654",
-      description: brokenPlanetDesc,
-      reviews: 125),
-  ProductsModel(
-      productName: "Nike x Nocta",
-      colour: "Black",
-      category: "Sweatshirts",
-      price: "£250",
-      rating: "5",
-      imageUrl:
-          "https://www.kickgame.co.uk/cdn/shop/products/Nike-x-Nocta-Tech-Fleece-Zip-Hoodie-_Black.png?v=1690892709",
-      description: noctaDesc,
-      reviews: 145),
-  ProductsModel(
-      productName: "Supreme Corteiz",
-      colour: "Black",
-      category: "T Shirts",
-      price: "£80",
-      rating: "5",
-      imageUrl:
-          "https://www.kickgame.co.uk/cdn/shop/files/SUP-CRTZ-RTW-TEE.png?v=1703675228",
-      description: supremeDesc,
-      reviews: 165),
-];
+import 'FavoritesModel.dart';
+
+class ProductProvider extends ChangeNotifier {
+  List<ProductsModel> products = [
+    ProductsModel(
+        productName: "Air Jordan 1",
+        colour: "Black/White/Metallic Gold",
+        category: "Shoes",
+        price: "£175",
+        rating: "3",
+        imageUrl:
+        "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/aewirmmftxbipywxwdkj/air-jordan-1-mid-se-shoes-gg517N.png",
+        description: jordan1Description,
+        reviews: 140,
+        isFavourite: false),
+    ProductsModel(
+        productName: "Air Jordan 5 Retro",
+        colour: "Black/White/Metallic Gold",
+        category: "Shoes",
+        price: "£250",
+        rating: "5",
+        imageUrl:
+        "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d79c4c47-f347-4050-89c5-788eebc0fc97/air-jordan-5-retro-shoes-T78RMv.png",
+        description: jordan5Description,
+        reviews: 80,
+        isFavourite: false),
+    ProductsModel(
+        productName: "Air Jordan 1 Zoom",
+        colour: "Black/White/Metallic Gold",
+        category: "Shoes",
+        price: "£115",
+        rating: "5",
+        imageUrl:
+        "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/cd5b4bbf-263d-4f4c-8713-c94593137966/air-jordan-1-zoom-cmft-2-shoes-0Vxszn.png",
+        description: jordan1CmftDescription,
+        reviews: 90,
+        isFavourite: false),
+    ProductsModel(
+        productName: "KAWS x UNIQLO UT",
+        colour: "Black",
+        category: "Sweatshirts",
+        price: "£175",
+        rating: "2",
+        imageUrl:
+        "https://www.kickgame.co.uk/cdn/shop/products/crewn-neck-kaws-black_grande.png?v=1694206687",
+        description: kawsBlackJumper,
+        reviews: 300,
+        isFavourite: false),
+    ProductsModel(
+        productName: "Broken Planet",
+        colour: "Black",
+        category: "Sweatshirts",
+        price: "£179",
+        rating: "5",
+        imageUrl:
+        "https://www.kickgame.co.uk/cdn/shop/files/BPM-ITA-HOOD-NVY_grande.png?v=1707924654",
+        description: brokenPlanetDesc,
+        reviews: 125,
+        isFavourite: false),
+    ProductsModel(
+        productName: "Nike x Nocta",
+        colour: "Black",
+        category: "Sweatshirts",
+        price: "£250",
+        rating: "5",
+        imageUrl:
+        "https://www.kickgame.co.uk/cdn/shop/products/Nike-x-Nocta-Tech-Fleece-Zip-Hoodie-_Black.png?v=1690892709",
+        description: noctaDesc,
+        reviews: 145,
+        isFavourite: false),
+    ProductsModel(
+        productName: "Supreme Corteiz",
+        colour: "Black",
+        category: "T Shirts",
+        price: "£80",
+        rating: "5",
+        imageUrl:
+        "https://www.kickgame.co.uk/cdn/shop/files/SUP-CRTZ-RTW-TEE.png?v=1703675228",
+        description: supremeDesc,
+        reviews: 165,
+        isFavourite: false),
+  ];
+
+  // Method to toggle favorite status for a product
+  List<FavoritesModel> favoriteProducts = []; // New list to store favorite products
+
+  void toggleFavorite(int index) {
+    products[index] = products[index].toggleFavorite();
+    if (products[index].isFavourite) {
+      favoriteProducts.add(FavoritesModel(
+        productName: products[index].productName,
+        category: products[index].category,
+        price: products[index].price,
+        description: products[index].description,
+        isFavourite: products[index].isFavourite
+      ));
+    } else {
+      favoriteProducts.removeWhere((favProduct) =>
+      favProduct.productName == products[index].productName);
+    }
+    notifyListeners();
+  }
+
+}
+
 
 String jordan1Description = "Play like '85.The Air Jordan 1 Mid SE brings fresh details and premium comfort to an iconic shoe.Its encapsulated Air-Sole unit cushions your foot, while the padded collar gives you a supportive feel on the move.";
 String jordan5Description = "Care for a swim? The finishing touch to all your favourite 'fits returns with the AJ5 Aqua. Paying homage to the coveted AJ8 colourway from '93, energetic pops of Aqua and Taxi pulse against a black backdrop. Flawless details from the original like the spiky midsole, side vents and lace lock tie it all together, giving these cool kicks that look you love. Dive on in—the water's fine.";
