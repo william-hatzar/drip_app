@@ -1,4 +1,4 @@
-import 'package:drip_app/HomeScreen.dart';
+import 'package:drip_app/models/CheckoutModel.dart';
 import 'package:drip_app/models/FavoritesModel.dart';
 import 'package:drip_app/models/ProductModel.dart';
 import 'package:drip_app/widgets/AddToCartWidget.dart';
@@ -9,10 +9,6 @@ import 'package:drip_app/widgets/RatingAndReviews.dart';
 import 'package:drip_app/widgets/SmallDivider.dart';
 import 'package:drip_app/widgets/TextWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'models/FavoritesModel.dart';
-import 'models/ProductModelSInk.dart';
 
 class ProductView extends StatefulWidget {
   final ProductsModel products;
@@ -26,7 +22,9 @@ class ProductView extends StatefulWidget {
   final bool favourite;
   final String description;
   final Function(FavoritesModel) addToFavorites;
-  final Function(bool) onFavoriteChanged; // Callback function
+  final Function(bool) onFavoriteChanged;
+  final Function(CheckoutModel) addToCheckout;
+  final int quantity; // Add quantity as a parameter
 
   const ProductView({
     Key? key,
@@ -41,7 +39,9 @@ class ProductView extends StatefulWidget {
     required this.favourite,
     required this.description,
     required this.addToFavorites,
-    required this.onFavoriteChanged, // Pass the callback function
+    required this.onFavoriteChanged,
+    required this.quantity,
+    required this.addToCheckout// Add quantity to the constructor
   }) : super(key: key);
 
   @override
@@ -49,13 +49,14 @@ class ProductView extends StatefulWidget {
 }
 
 class _ProductViewState extends State<ProductView> {
-  bool favorite = false; // Local state variable for favorite status
-  var _quantity = 1;
-  var totalStars = 5;
+  bool favorite = false;
+  late int _quantity; // Declare _quantity as a state variable
+
   @override
   void initState() {
     super.initState();
-    favorite = widget.favourite; // Initialize favorite status from the passed value
+    favorite = widget.favourite;
+    _quantity = widget.quantity; // Initialize _quantity from the passed value
   }
 
   @override
@@ -88,7 +89,7 @@ class _ProductViewState extends State<ProductView> {
                   const SizedBox(height: 20),
                   ProductNamePrice(
                     productName: widget.productName,
-                    productPrice: widget.price,
+                    productPrice: "£${widget.price}",
                   ),
                   TextWidget(
                     text: widget.category,
@@ -98,7 +99,7 @@ class _ProductViewState extends State<ProductView> {
                   ),
                   RatingAndReviews(
                     ratings: widget.rating,
-                    totalStars: totalStars,
+                    totalStars: 5,
                     reviews: widget.reviews,
                   ),
                   const SizedBox(height: 20),
@@ -119,27 +120,24 @@ class _ProductViewState extends State<ProductView> {
                           });
                         },
                       ),
-                      AddToCartWidget(),
+                      AddToCartWidget(addToCheckout: widget.addToCheckout, productName: widget.productName, category: widget.category, price: widget.price, imageUrl: widget.imageUrl, quantity: widget.quantity),
                     ],
                   ),
                 ],
               ),
             ),
           ),
-          SmallDivider(),
+          const SmallDivider(),
           Positioned(
             top: 0,
             left: 300,
             right: 0,
             bottom: 700,
             child: IconButton(
-              // Inside the onPressed callback of the IconButton in ProductView
-              onPressed: () async {
+              onPressed: () {
                 setState(() {
-                  favorite = !favorite; // Toggle favorite status locally
-                  // Update isFavourite status in the products list
+                  favorite = !favorite;
                   widget.products.isFavourite = favorite;
-                  // Pass updated favorite status to the addToFavorites function
                   widget.addToFavorites(FavoritesModel(
                     productName: widget.productName,
                     category: widget.category,
@@ -148,18 +146,14 @@ class _ProductViewState extends State<ProductView> {
                     isFavourite: favorite,
                     imageUrl: widget.imageUrl,
                   ));
+                  widget.onFavoriteChanged(favorite);
                 });
-                // Call the callback function to notify the Favorites page of the change
-                widget.onFavoriteChanged(favorite);
               },
-
-
               icon: Icon(
                 Icons.favorite,
-                color: favorite ? Colors.red : Colors.grey, // Use local favorite status
+                color: favorite ? Colors.red : Colors.grey,
               ),
             ),
-
           ),
         ],
       ),

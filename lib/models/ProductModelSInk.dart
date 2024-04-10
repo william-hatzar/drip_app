@@ -9,7 +9,7 @@ class ProductProvider extends ChangeNotifier {
         productName: "Air Jordan 1",
         colour: "Black/White/Metallic Gold",
         category: "Shoes",
-        price: "£175",
+        price: "175",
         rating: "3",
         imageUrl:
         "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/aewirmmftxbipywxwdkj/air-jordan-1-mid-se-shoes-gg517N.png",
@@ -20,7 +20,7 @@ class ProductProvider extends ChangeNotifier {
         productName: "Air Jordan 5 Retro",
         colour: "Black/White/Metallic Gold",
         category: "Shoes",
-        price: "£250",
+        price: "250",
         rating: "5",
         imageUrl:
         "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d79c4c47-f347-4050-89c5-788eebc0fc97/air-jordan-5-retro-shoes-T78RMv.png",
@@ -31,7 +31,7 @@ class ProductProvider extends ChangeNotifier {
         productName: "Air Jordan 1 Zoom",
         colour: "Black/White/Metallic Gold",
         category: "Shoes",
-        price: "£115",
+        price: "115",
         rating: "5",
         imageUrl:
         "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/cd5b4bbf-263d-4f4c-8713-c94593137966/air-jordan-1-zoom-cmft-2-shoes-0Vxszn.png",
@@ -42,7 +42,7 @@ class ProductProvider extends ChangeNotifier {
         productName: "KAWS x UNIQLO UT",
         colour: "Black",
         category: "Sweatshirts",
-        price: "£175",
+        price: "175",
         rating: "2",
         imageUrl:
         "https://www.kickgame.co.uk/cdn/shop/products/crewn-neck-kaws-black_grande.png?v=1694206687",
@@ -53,7 +53,7 @@ class ProductProvider extends ChangeNotifier {
         productName: "Broken Planet",
         colour: "Black",
         category: "Sweatshirts",
-        price: "£179",
+        price: "179",
         rating: "5",
         imageUrl:
         "https://www.kickgame.co.uk/cdn/shop/files/BPM-ITA-HOOD-NVY_grande.png?v=1707924654",
@@ -64,7 +64,7 @@ class ProductProvider extends ChangeNotifier {
         productName: "Nike x Nocta",
         colour: "Black",
         category: "Sweatshirts",
-        price: "£250",
+        price: "250",
         rating: "5",
         imageUrl:
         "https://www.kickgame.co.uk/cdn/shop/products/Nike-x-Nocta-Tech-Fleece-Zip-Hoodie-_Black.png?v=1690892709",
@@ -75,7 +75,7 @@ class ProductProvider extends ChangeNotifier {
         productName: "Supreme Corteiz",
         colour: "Black",
         category: "T Shirts",
-        price: "£80",
+        price: "80",
         rating: "5",
         imageUrl:
         "https://www.kickgame.co.uk/cdn/shop/files/SUP-CRTZ-RTW-TEE.png?v=1703675228",
@@ -86,28 +86,6 @@ class ProductProvider extends ChangeNotifier {
 
   // Method to toggle favorite status for a product
   List<FavoritesModel> favoriteProducts = []; // List to store favorite products
-
-  void toggleFavorite(int index) {
-    // Toggle the isFavourite property of the product at the specified index
-    products[index] = products[index].toggleFavorite();
-
-    // Check if the product is now a favorite and update favoriteProducts accordingly
-    if (products[index].isFavourite) {
-      favoriteProducts.add(FavoritesModel(
-        productName: products[index].productName,
-        category: products[index].category,
-        price: products[index].price,
-        description: products[index].description,
-        isFavourite: true,
-        imageUrl: products[index].imageUrl
-      ));
-    } else {
-      favoriteProducts.removeWhere((favProduct) =>
-      favProduct.productName == products[index].productName);
-    }
-
-    notifyListeners(); // Notify listeners of the change
-  }
 
 }
 

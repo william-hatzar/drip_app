@@ -1,4 +1,5 @@
-import 'package:drip_app/ProductView.dart';
+import 'package:drip_app/models/CheckoutModel.dart';
+import 'package:drip_app/views/ProductView.dart';
 import 'package:drip_app/models/FavoritesModel.dart';
 import 'package:drip_app/models/ProductModel.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +7,16 @@ import 'package:flutter/material.dart';
 class ProductGridView extends StatefulWidget {
   final List<ProductsModel> filteredProducts;
   final Function(FavoritesModel) addToFavorites;
+  final int quantity;
+  final Function(CheckoutModel) addToCheckout;
+
   const ProductGridView({
-    Key? key,
+    super.key,
     required this.filteredProducts,
     required this.addToFavorites,
-  }) : super(key: key);
+    required this.quantity,
+    required this.addToCheckout
+  });
 
   @override
   State<ProductGridView> createState() => _ProductGridViewState();
@@ -49,11 +55,12 @@ class _ProductGridViewState extends State<ProductGridView> {
                   favourite: widget.filteredProducts[index].isFavourite,
                   addToFavorites: widget.addToFavorites,
                   onFavoriteChanged: (isFavorite) {
-                    // Update the favorite status in the ProductGridView widget
                     setState(() {
                       widget.filteredProducts[index].isFavourite = isFavorite;
                     });
                   },
+                  quantity: widget.quantity,
+                  addToCheckout: widget.addToCheckout,
                 ),
               ),
             );

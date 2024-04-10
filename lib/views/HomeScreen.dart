@@ -1,5 +1,7 @@
+import 'package:drip_app/models/CheckoutModel.dart';
 import 'package:drip_app/models/FavoritesModel.dart';
-import 'package:drip_app/Favorites.dart';
+import 'package:drip_app/views/Favorites.dart';
+import 'package:drip_app/widgets/BottomNavBar.dart';
 import 'package:flutter/material.dart';
 import 'package:drip_app/constants.dart';
 import 'package:drip_app/models/ProductModel.dart';
@@ -12,8 +14,10 @@ import 'package:drip_app/widgets/TopRow.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  final List<ProductsModel> products; // Add this line
-  const HomeScreen({Key? key, required this.products}) : super(key: key);
+  final List<ProductsModel> products;
+  final List<CheckoutModel> checkoutItems;
+
+  const HomeScreen({Key? key, required this.products, required this.checkoutItems}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -25,6 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ProductsModel> filteredProducts = [];
   bool isGridView = true; // To track the current view mode
   List<FavoritesModel> favProducts = [];
+  List<CheckoutModel> checkoutItems = [];
+  var quantity = 1;
 
 
   // Function to add or remove a product from favorites
@@ -44,7 +50,21 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void addToCheckout(CheckoutModel checkout) {
+    setState(() {
+      final existingProductIndex = checkoutItems.indexWhere((product) =>
+          product.productName == checkout.productName &&
+          product.category == checkout.category &&
+          product.price == checkout.price &&
+          product.imageUrl == checkout.imageUrl);
 
+      if(existingProductIndex != -1) {
+        checkoutItems.removeAt(existingProductIndex);
+      } else {
+        checkoutItems.add(checkout);
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -127,46 +147,12 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 20),
               TopRow(leftText: topProducts, rightText: showAll),
               const SizedBox(height: 10),
-              ProductGridView(filteredProducts: filteredProducts, addToFavorites: addToFavorites) // Display GridView
+              ProductGridView(filteredProducts: filteredProducts, addToFavorites: addToFavorites, quantity: quantity, addToCheckout: addToCheckout) // Display GridView
             ],
           ),
         ),
       ),
-      bottomNavigationBar: bottomNavBar(context, favProducts, Provider.of<ProductProvider>(context)), // Pass context to bottomNavBar function
+      bottomNavigationBar: bottomNavBar(context, favProducts, Provider.of<ProductProvider>(context), widget.products, widget.checkoutItems, quantity, addToCheckout), // Pass context to bottomNavBar function
     );
   }
-}
-
-Widget bottomNavBar(BuildContext context, List<FavoritesModel> favProducts, ProductProvider productProvider) {
-  return BottomNavigationBar(
-    type: BottomNavigationBarType.fixed,
-    items: const <BottomNavigationBarItem>[
-      BottomNavigationBarItem(
-        icon: Icon(Icons.search),
-        label: 'Search',
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.favorite_border),
-        label: 'Favourites',
-      ),
-      BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_checkout), label: 'Checkout')
-    ],
-    onTap: (int index) {
-      // Navigate to the corresponding page when a bottom navigation bar item is tapped
-      switch (index) {
-        case 0:
-          Navigator.pushNamed(context, '/home');
-          break;
-        case 1:
-          Navigator.push(context, MaterialPageRoute(builder: (_) => Favorites(favProducts: favProducts, productProvider: productProvider)));
-          break;
-        case 2:
-          Navigator.pushNamed(context, '/settings');
-          break;
-        default:
-          Navigator.pushNamed(context, '/home');
-          break;
-      }
-    },
-  );
 }
