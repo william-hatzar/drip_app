@@ -19,6 +19,7 @@ class Favorites extends StatefulWidget {
 
 class _FavoritesState extends State<Favorites> {
   @override
+  @override
   Widget build(BuildContext context) {
     print(widget.favProducts.map((e) => e.isFavourite.toString()));
     return Scaffold(
@@ -29,19 +30,30 @@ class _FavoritesState extends State<Favorites> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextWidget(
-                  text: "Favorites", fontWeight: FontWeight.w200, fontSize: 25),
-              SizedBox(width: 30)
+                text: "Favorites",
+                fontWeight: FontWeight.w200,
+                fontSize: 25,
+              ),
+              SizedBox(width: 30),
             ],
           ),
         ),
         centerTitle: false,
       ),
-      body: ListView.builder(
+      body: widget.favProducts.isEmpty
+          ? const Center(
+        child: TextWidget(
+          text: 'No favorites to display',
+          fontWeight: FontWeight.w200,
+          fontSize: 30,
+        ),
+      )
+          : ListView.builder(
         itemCount: widget.favProducts.length,
         itemBuilder: (context, index) {
           final favoriteProduct = widget.favProducts[index];
           if (!favoriteProduct.isFavourite) {
-            return SizedBox.shrink();
+            return const SizedBox.shrink();
           }
           return Column(
             children: [
@@ -59,19 +71,21 @@ class _FavoritesState extends State<Favorites> {
                 onDismissed: (direction) {
                   setState(() {
                     final productIndex = widget.favProducts.indexWhere(
-                        (favProduct) =>
-                            favProduct.productName ==
-                            favoriteProduct.productName);
+                          (favProduct) =>
+                      favProduct.productName ==
+                          favoriteProduct.productName,
+                    );
                     if (productIndex != -1) {
                       final productName =
                           widget.favProducts[productIndex].productName;
                       // Remove the favorite status from the product in the product provider
                       final productIndexInProvider =
-                          widget.productProvider.products.indexWhere(
-                        (product) => product.productName == productName,
+                      widget.productProvider.products.indexWhere(
+                            (product) => product.productName == productName,
                       );
                       if (productIndexInProvider != -1) {
-                        widget.productProvider.products[productIndexInProvider]
+                        widget.productProvider
+                            .products[productIndexInProvider]
                             .isFavourite = false;
                       }
                       widget.productProvider
@@ -84,10 +98,11 @@ class _FavoritesState extends State<Favorites> {
                 child: Card(
                   margin: const EdgeInsets.all(8),
                   elevation: 0,
-                  color: Colors.transparent, // Remove elevation
+                  color: Colors.transparent,
+                  // Remove elevation
                   shape: RoundedRectangleBorder(
                     borderRadius:
-                        BorderRadius.circular(8), // Set rectangular shape
+                    BorderRadius.circular(8), // Set rectangular shape
                   ),
                   child: ListTile(
                     leading: ClipRRect(
@@ -100,17 +115,18 @@ class _FavoritesState extends State<Favorites> {
                       ),
                     ),
                     title: TextWidget(
-                        text: favoriteProduct.productName,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 19),
+                      text: favoriteProduct.productName,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 19,
+                    ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 4),
                         Text(
                           favoriteProduct.category,
-                          style:
-                              const TextStyle(fontSize: 14, color: Colors.grey),
+                          style: const TextStyle(
+                              fontSize: 14, color: Colors.grey),
                         ),
                         Text(
                           favoriteProduct.price,
@@ -121,46 +137,50 @@ class _FavoritesState extends State<Favorites> {
                     ),
                     onTap: () async {
                       final productIndex =
-                          widget.productProvider.products.indexWhere(
-                        (prod) =>
-                            prod.productName == favoriteProduct.productName,
+                      widget.productProvider.products.indexWhere(
+                            (prod) =>
+                        prod.productName ==
+                            favoriteProduct.productName,
                       );
                       if (productIndex != -1) {
-                        final product =
-                            widget.productProvider.products[productIndex];
+                        final product = widget
+                            .productProvider.products[productIndex];
                         final updatedFavorite = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => ProductView(
-                              products: product,
-                              productIndex: productIndex,
-                              productName: product.productName,
-                              imageUrl: product.imageUrl,
-                              price: product.price,
-                              category: product.category,
-                              rating: product.rating,
-                              reviews: product.reviews,
-                              favourite: product.isFavourite,
-                              description: product.description,
-                              addToFavorites: (favModel) {
-                                // Implement addToFavorites function if needed
-                              },
-                              onFavoriteChanged: (isFavorite) {
-                                setState(() {
-                                  // Update the favorite status locally in the Favorites page
-                                  widget.favProducts[index].isFavourite = isFavorite;
-                                  if (!isFavorite) {
-                                    // If the product is unfavorited, remove it from the favProducts list
-                                    widget.favProducts.removeAt(index);
-                                  }
-                                });
-                              },
-                            ),
+                            builder: (_) =>
+                                ProductView(
+                                  products: product,
+                                  productIndex: productIndex,
+                                  productName: product.productName,
+                                  imageUrl: product.imageUrl,
+                                  price: product.price,
+                                  category: product.category,
+                                  rating: product.rating,
+                                  reviews: product.reviews,
+                                  favourite: product.isFavourite,
+                                  description: product.description,
+                                  addToFavorites: (favModel) {
+                                    // Implement addToFavorites function if needed
+                                  },
+                                  onFavoriteChanged: (isFavorite) {
+                                    setState(() {
+                                      // Update the favorite status locally in the Favorites page
+                                      widget.favProducts[index].isFavourite =
+                                          isFavorite;
+                                      if (!isFavorite) {
+                                        // If the product is unfavorited, remove it from the favProducts list
+                                        widget.favProducts.removeAt(index);
+                                      }
+                                    });
+                                  },
+                                ),
                           ),
                         );
                         // Update the favorite status locally if it's changed in the ProductView page
                         if (updatedFavorite != null &&
-                            updatedFavorite != favoriteProduct.isFavourite) {
+                            updatedFavorite !=
+                                favoriteProduct.isFavourite) {
                           setState(() {
                             favoriteProduct.isFavourite = updatedFavorite;
                           });
