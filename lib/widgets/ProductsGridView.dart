@@ -3,16 +3,20 @@ import 'package:drip_app/models/FavoritesModel.dart';
 import 'package:drip_app/models/ProductModel.dart';
 import 'package:flutter/material.dart';
 
-class ProductGridView extends StatelessWidget {
+class ProductGridView extends StatefulWidget {
   final List<ProductsModel> filteredProducts;
   final Function(FavoritesModel) addToFavorites;
-
   const ProductGridView({
     Key? key,
     required this.filteredProducts,
     required this.addToFavorites,
   }) : super(key: key);
 
+  @override
+  State<ProductGridView> createState() => _ProductGridViewState();
+}
+
+class _ProductGridViewState extends State<ProductGridView> {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -25,7 +29,7 @@ class ProductGridView extends StatelessWidget {
         mainAxisSpacing: 10.0,
         childAspectRatio: 0.7,
       ),
-      itemCount: filteredProducts.length,
+      itemCount: widget.filteredProducts.length,
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
@@ -33,17 +37,23 @@ class ProductGridView extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (_) => ProductView(
-                  products: filteredProducts[index],
+                  products: widget.filteredProducts[index],
                   productIndex: index,
-                  productName: filteredProducts[index].productName,
-                  imageUrl: filteredProducts[index].imageUrl,
-                  price: filteredProducts[index].price,
-                  category: filteredProducts[index].category,
-                  rating: filteredProducts[index].rating,
-                  reviews: filteredProducts[index].reviews,
-                  description: filteredProducts[index].description,
-                  favourite: filteredProducts[index].isFavourite,
-                  addToFavorites: addToFavorites,
+                  productName: widget.filteredProducts[index].productName,
+                  imageUrl: widget.filteredProducts[index].imageUrl,
+                  price: widget.filteredProducts[index].price,
+                  category: widget.filteredProducts[index].category,
+                  rating: widget.filteredProducts[index].rating,
+                  reviews: widget.filteredProducts[index].reviews,
+                  description: widget.filteredProducts[index].description,
+                  favourite: widget.filteredProducts[index].isFavourite,
+                  addToFavorites: widget.addToFavorites,
+                  onFavoriteChanged: (isFavorite) {
+                    // Update the favorite status in the ProductGridView widget
+                    setState(() {
+                      widget.filteredProducts[index].isFavourite = isFavorite;
+                    });
+                  },
                 ),
               ),
             );
@@ -61,7 +71,7 @@ class ProductGridView extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.network(
-                      filteredProducts[index].imageUrl,
+                      widget.filteredProducts[index].imageUrl,
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
                     ),
@@ -69,7 +79,7 @@ class ProductGridView extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  filteredProducts[index].productName,
+                  widget.filteredProducts[index].productName,
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -78,7 +88,7 @@ class ProductGridView extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  filteredProducts[index].category,
+                  widget.filteredProducts[index].category,
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 13,
@@ -87,7 +97,7 @@ class ProductGridView extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  filteredProducts[index].price,
+                  widget.filteredProducts[index].price,
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 15,

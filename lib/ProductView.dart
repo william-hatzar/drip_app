@@ -1,3 +1,4 @@
+import 'package:drip_app/HomeScreen.dart';
 import 'package:drip_app/models/FavoritesModel.dart';
 import 'package:drip_app/models/ProductModel.dart';
 import 'package:drip_app/widgets/AddToCartWidget.dart';
@@ -25,6 +26,7 @@ class ProductView extends StatefulWidget {
   final bool favourite;
   final String description;
   final Function(FavoritesModel) addToFavorites;
+  final Function(bool) onFavoriteChanged; // Callback function
 
   const ProductView({
     Key? key,
@@ -39,6 +41,7 @@ class ProductView extends StatefulWidget {
     required this.favourite,
     required this.description,
     required this.addToFavorites,
+    required this.onFavoriteChanged, // Pass the callback function
   }) : super(key: key);
 
   @override
@@ -130,7 +133,8 @@ class _ProductViewState extends State<ProductView> {
             right: 0,
             bottom: 700,
             child: IconButton(
-              onPressed: () {
+              // Inside the onPressed callback of the IconButton in ProductView
+              onPressed: () async {
                 setState(() {
                   favorite = !favorite; // Toggle favorite status locally
                   // Update isFavourite status in the products list
@@ -142,15 +146,20 @@ class _ProductViewState extends State<ProductView> {
                     price: widget.price,
                     description: widget.description,
                     isFavourite: favorite,
+                    imageUrl: widget.imageUrl,
                   ));
-                  // No need to call toggleFavorite here, as it's already called in the Favorites page
                 });
+                // Call the callback function to notify the Favorites page of the change
+                widget.onFavoriteChanged(favorite);
               },
+
+
               icon: Icon(
                 Icons.favorite,
                 color: favorite ? Colors.red : Colors.grey, // Use local favorite status
               ),
             ),
+
           ),
         ],
       ),

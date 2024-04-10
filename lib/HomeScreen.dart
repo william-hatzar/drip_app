@@ -127,19 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 20),
               TopRow(leftText: topProducts, rightText: showAll),
               const SizedBox(height: 10),
-              isGridView
-                  ? ProductGridView(filteredProducts: filteredProducts, addToFavorites: addToFavorites) // Display GridView
-                  : ListView.builder(
-                // Display ListView
-                itemCount: filteredProducts.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(filteredProducts[index].productName),
-                    subtitle: Text(filteredProducts[index].description),
-                    // You can customize ListTile according to your product model
-                  );
-                },
-              ),
+              ProductGridView(filteredProducts: filteredProducts, addToFavorites: addToFavorites) // Display GridView
             ],
           ),
         ),
@@ -161,7 +149,7 @@ Widget bottomNavBar(BuildContext context, List<FavoritesModel> favProducts, Prod
         icon: Icon(Icons.favorite_border),
         label: 'Favourites',
       ),
-      BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings')
+      BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_checkout), label: 'Checkout')
     ],
     onTap: (int index) {
       // Navigate to the corresponding page when a bottom navigation bar item is tapped

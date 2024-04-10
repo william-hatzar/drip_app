@@ -99,6 +99,7 @@ class ProductProvider extends ChangeNotifier {
         price: products[index].price,
         description: products[index].description,
         isFavourite: true,
+        imageUrl: products[index].imageUrl
       ));
     } else {
       favoriteProducts.removeWhere((favProduct) =>
