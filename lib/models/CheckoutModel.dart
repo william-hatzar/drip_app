@@ -26,8 +26,8 @@ class CheckoutProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeFromCheckout(CheckoutModel checkout) {
-    _items.remove(checkout);
+  void removeFromCheckout(int index) {
+    _items.removeAt(index);
     notifyListeners();
   }
 
@@ -35,6 +35,20 @@ class CheckoutProvider extends ChangeNotifier {
     final index = _items.indexOf(checkout);
     if (index != -1) {
       _items[index].quantity = newQuantity;
+      notifyListeners();
+    }
+  }
+
+  void increaseQuantity(int index) {
+    if (index >= 0 && index < _items.length) {
+      _items[index].quantity++;
+      notifyListeners();
+    }
+  }
+
+  void decreaseQuantity(int index) {
+    if (index >= 0 && index < _items.length && _items[index].quantity > 1) {
+      _items[index].quantity--;
       notifyListeners();
     }
   }

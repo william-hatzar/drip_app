@@ -104,7 +104,7 @@ class _ProductGridViewState extends State<ProductGridView> {
                   ),
                 ),
                 Text(
-                  widget.filteredProducts[index].price,
+                  "£${widget.filteredProducts[index].price}",
                   style: const TextStyle(
                     color: Colors.black,
                     fontSize: 15,

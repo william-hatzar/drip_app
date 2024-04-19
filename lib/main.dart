@@ -10,7 +10,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProductProvider()),
-        ChangeNotifierProvider(create: (_) => CheckoutProvider()), // Add another provider
+        ChangeNotifierProvider(create: (_) => CheckoutProvider()),
       ],
       child: const Root(),
     ),

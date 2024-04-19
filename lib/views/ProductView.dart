@@ -2,6 +2,7 @@ import 'package:drip_app/models/CheckoutModel.dart';
 import 'package:drip_app/models/FavoritesModel.dart';
 import 'package:drip_app/models/ProductModel.dart';
 import 'package:drip_app/widgets/AddToCartWidget.dart';
+import 'package:drip_app/widgets/FavoriteWidget.dart';
 import 'package:drip_app/widgets/HeaderImage.dart';
 import 'package:drip_app/widgets/ProductNamePrice.dart';
 import 'package:drip_app/widgets/QuantityWidget.dart';
@@ -24,25 +25,26 @@ class ProductView extends StatefulWidget {
   final Function(FavoritesModel) addToFavorites;
   final Function(bool) onFavoriteChanged;
   final Function(CheckoutModel) addToCheckout;
-  final int quantity; // Add quantity as a parameter
+  final int quantity;
 
-  const ProductView({
-    Key? key,
-    required this.products,
-    required this.productIndex,
-    required this.productName,
-    required this.imageUrl,
-    required this.price,
-    required this.category,
-    required this.rating,
-    required this.reviews,
-    required this.favourite,
-    required this.description,
-    required this.addToFavorites,
-    required this.onFavoriteChanged,
-    required this.quantity,
-    required this.addToCheckout// Add quantity to the constructor
-  }) : super(key: key);
+  const ProductView(
+      {Key? key,
+      required this.products,
+      required this.productIndex,
+      required this.productName,
+      required this.imageUrl,
+      required this.price,
+      required this.category,
+      required this.rating,
+      required this.reviews,
+      required this.favourite,
+      required this.description,
+      required this.addToFavorites,
+      required this.onFavoriteChanged,
+      required this.quantity,
+      required this.addToCheckout // Add quantity to the constructor
+      })
+      : super(key: key);
 
   @override
   State<ProductView> createState() => _ProductViewState();
@@ -120,7 +122,13 @@ class _ProductViewState extends State<ProductView> {
                           });
                         },
                       ),
-                      AddToCartWidget(addToCheckout: widget.addToCheckout, productName: widget.productName, category: widget.category, price: widget.price, imageUrl: widget.imageUrl, quantity: widget.quantity),
+                      AddToCartWidget(
+                          addToCheckout: widget.addToCheckout,
+                          productName: widget.productName,
+                          category: widget.category,
+                          price: widget.price,
+                          imageUrl: widget.imageUrl,
+                          quantity: _quantity),
                     ],
                   ),
                 ],
@@ -128,13 +136,9 @@ class _ProductViewState extends State<ProductView> {
             ),
           ),
           const SmallDivider(),
-          Positioned(
-            top: 0,
-            left: 300,
-            right: 0,
-            bottom: 700,
-            child: IconButton(
-              onPressed: () {
+          FavouriteWidget(
+              favorite: favorite,
+              onFavoriteChanged: (bool newFavorite) {
                 setState(() {
                   favorite = !favorite;
                   widget.products.isFavourite = favorite;
@@ -148,13 +152,7 @@ class _ProductViewState extends State<ProductView> {
                   ));
                   widget.onFavoriteChanged(favorite);
                 });
-              },
-              icon: Icon(
-                Icons.favorite,
-                color: favorite ? Colors.red : Colors.grey,
-              ),
-            ),
-          ),
+              }),
         ],
       ),
     );

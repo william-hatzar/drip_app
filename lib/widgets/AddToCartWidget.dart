@@ -1,5 +1,3 @@
-import 'package:drip_app/views/CheckoutView.dart';
-import 'package:drip_app/widgets/TextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,25 +11,36 @@ class AddToCartWidget extends StatefulWidget {
   final String imageUrl;
   final int quantity;
 
-  const AddToCartWidget(
-      {super.key,
-      required this.addToCheckout,
-      required this.productName,
-      required this.category,
-      required this.price,
-      required this.imageUrl,
-      required this.quantity});
+  const AddToCartWidget({
+    Key? key,
+    required this.addToCheckout,
+    required this.productName,
+    required this.category,
+    required this.price,
+    required this.imageUrl,
+    required this.quantity,
+  }) : super(key: key);
 
   @override
   State<AddToCartWidget> createState() => _AddToCartWidgetState();
 }
 
 class _AddToCartWidgetState extends State<AddToCartWidget> {
+  void _showMessage(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Item added to cart'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        final checkoutProvider = Provider.of<CheckoutProvider>(context, listen: false);
+        final checkoutProvider =
+        Provider.of<CheckoutProvider>(context, listen: false);
         checkoutProvider.addToCheckout(CheckoutModel(
           productName: widget.productName,
           category: widget.category,
@@ -39,6 +48,7 @@ class _AddToCartWidgetState extends State<AddToCartWidget> {
           imageUrl: widget.imageUrl,
           quantity: widget.quantity,
         ));
+        _showMessage(context); // Show message when item is added
       },
       child: Container(
         alignment: Alignment.center,

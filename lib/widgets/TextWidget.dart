@@ -5,13 +5,14 @@ class TextWidget extends StatelessWidget {
   final FontWeight fontWeight;
   final double fontSize;
   final Color? fontColour;
-  const TextWidget({Key? key, required this.text, required this.fontWeight, required this.fontSize, this.fontColour}) : super(key: key);
+  final TextAlign textAlign;
+  const TextWidget({super.key, required this.text, required this.fontWeight, required this.fontSize, this.fontColour, this.textAlign = TextAlign.start});
 
   @override
   Widget build(BuildContext context) {
     return Text(
      text,
-      textAlign: TextAlign.start,
+      textAlign: textAlign,
       style: TextStyle(
         fontFamily: "Poppins",
         fontWeight: fontWeight,

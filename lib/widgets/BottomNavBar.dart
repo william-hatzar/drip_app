@@ -8,19 +8,20 @@ import '../models/FavoritesModel.dart';
 import '../models/ProductModel.dart';
 import '../models/ProductModelSInk.dart';
 
-Widget bottomNavBar(BuildContext context, List<FavoritesModel> favProducts, ProductProvider productProvider, List<ProductsModel> products, List<CheckoutModel> checkoutItems, int quantity, Function(CheckoutModel) addToCheckout) {
+Widget bottomNavBar(BuildContext context, List<FavoritesModel> favProducts, ProductProvider productProvider, List<ProductsModel> products, List<CheckoutModel> checkoutItems, int quantity, Function(CheckoutModel) addToCheckout, int currentIndex) {
   return BottomNavigationBar(
     type: BottomNavigationBarType.fixed,
-    items: const <BottomNavigationBarItem>[
+    currentIndex: currentIndex,
+    items: <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-        icon: Icon(Icons.home, color: Colors.black),
-        label: 'Home'
+          icon: Icon(Icons.home, color: currentIndex == 0 ? Colors.black : Colors.grey), // Check if the index is equal to the current index
+          label: 'Home'
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.favorite_border, color: Colors.black),
+        icon: Icon(Icons.favorite_border, color: currentIndex == 1 ? Colors.black : Colors.grey),
         label: 'Favourites',
       ),
-      BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_checkout), label: 'Checkout')
+      BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_checkout, color: currentIndex == 2 ? Colors.black : Colors.grey), label: 'Checkout')
     ],
     onTap: (int index) {
       // Navigate to the corresponding page when a bottom navigation bar item is tapped

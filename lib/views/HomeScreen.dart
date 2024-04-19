@@ -56,7 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
           product.productName == checkout.productName &&
           product.category == checkout.category &&
           product.price == checkout.price &&
-          product.imageUrl == checkout.imageUrl);
+          product.imageUrl == checkout.imageUrl &&
+          quantity == checkout.quantity);
 
       if(existingProductIndex != -1) {
         checkoutItems.removeAt(existingProductIndex);
@@ -152,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: bottomNavBar(context, favProducts, Provider.of<ProductProvider>(context), widget.products, widget.checkoutItems, quantity, addToCheckout), // Pass context to bottomNavBar function
+      bottomNavigationBar: bottomNavBar(context, favProducts, Provider.of<ProductProvider>(context), widget.products, widget.checkoutItems, quantity, addToCheckout, 0), // Pass context to bottomNavBar function
     );
   }
 }
