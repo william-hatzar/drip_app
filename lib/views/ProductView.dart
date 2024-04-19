@@ -2,6 +2,7 @@ import 'package:drip_app/models/CheckoutModel.dart';
 import 'package:drip_app/models/FavoritesModel.dart';
 import 'package:drip_app/models/ProductModel.dart';
 import 'package:drip_app/widgets/AddToCartWidget.dart';
+import 'package:drip_app/widgets/BackWidget.dart';
 import 'package:drip_app/widgets/FavoriteWidget.dart';
 import 'package:drip_app/widgets/HeaderImage.dart';
 import 'package:drip_app/widgets/ProductNamePrice.dart';
@@ -153,6 +154,7 @@ class _ProductViewState extends State<ProductView> {
                   widget.onFavoriteChanged(favorite);
                 });
               }),
+            const Backwidget()
         ],
       ),
     );
