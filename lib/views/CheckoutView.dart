@@ -120,7 +120,7 @@ class CheckoutView extends StatelessWidget {
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  TextWidget(text: item.category, fontWeight: FontWeight.w400, fontSize: 15, fontColour: const Color(0xff8D95A3),),
+                                  TextWidget(text: item.category, fontWeight: FontWeight.w400, fontSize: 15, fontColour: const Color(0xff8D95A3)),
                                   TextWidget(text: "£${double.parse(item.price) * item.quantity}", fontWeight: FontWeight.w400, fontSize: 15)
                                 ],
                               ),
