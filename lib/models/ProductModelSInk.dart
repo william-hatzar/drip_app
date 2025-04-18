@@ -78,7 +78,7 @@ class ProductProvider extends ChangeNotifier {
         price: "80",
         rating: "5",
         imageUrl:
-            "https://www.kickgame.co.uk/cdn/shop/files/SUP-CRTZ-RTW-TEE.png?v=1703675228",
+            "https://www.kickgame.co.uk/cdn/shop/files/Supreme-Corteiz-Rules-The-World-Tee-Black.png?v=1726237727",
         description: supremeDesc,
         reviews: 165,
         isFavourite: false),

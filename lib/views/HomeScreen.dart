@@ -2,6 +2,7 @@ import 'package:drip_app/models/CheckoutModel.dart';
 import 'package:drip_app/models/FavoritesModel.dart';
 import 'package:drip_app/views/Favorites.dart';
 import 'package:drip_app/widgets/BottomNavBar.dart';
+import 'package:drip_app/widgets/TopSection.dart';
 import 'package:flutter/material.dart';
 import 'package:drip_app/constants.dart';
 import 'package:drip_app/models/ProductModel.dart';
@@ -114,27 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 70),
-              Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextWidget(text: goodMorning, fontWeight: FontWeight.w400, fontSize: 16),
-                      const SizedBox(height: 5),
-                      TextWidget(text: personName, fontWeight: FontWeight.w400, fontSize: 24),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          locationOn,
-                          TextWidget(text: location, fontWeight: FontWeight.w200, fontSize: 14.33)
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 90),
-                  Image.asset(avatarImg),
-                ],
-              ),
+              TopSection(),
               SizedBox(height: 20),
               SearchWidget(
                 textController: text1,
